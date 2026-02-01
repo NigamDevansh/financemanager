@@ -27,19 +27,19 @@ public class ProfileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String fullname;
     @Column(unique = true)
     private String email;
     private String password;
     private String profileImageUrl;
-    private String activationToken;
-    private Boolean isActive;
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    private String activationToken;
+    private Boolean isActive;
 
     // this is a hook that is called before the entity is created in the table
     @PrePersist

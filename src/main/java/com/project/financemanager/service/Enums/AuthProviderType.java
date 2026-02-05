@@ -4,5 +4,5 @@ public enum AuthProviderType {
 
     LOCAL,
     GOOGLE,
-    FACEBOOK,
+    GITHUB,
 }

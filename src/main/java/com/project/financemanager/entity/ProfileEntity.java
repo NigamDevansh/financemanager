@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.project.financemanager.service.Enums.AuthProviderType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,12 +42,16 @@ public class ProfileEntity {
     private LocalDateTime updatedAt;
     private String activationToken;
     private Boolean isActive;
+    private AuthProviderType authProviderType;
 
     // this is a hook that is called before the entity is created in the table
     @PrePersist
     public void prePersist() {
         if (this.isActive == null) {
             this.isActive = false;
+        }
+        if (this.authProviderType == null) {
+            this.authProviderType = AuthProviderType.LOCAL;
         }
     }
 }

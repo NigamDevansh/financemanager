@@ -2,6 +2,8 @@ package com.project.financemanager.dto;
 
 import java.time.LocalDateTime;
 
+import com.project.financemanager.service.AuthProviderType.AuthProviderType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,7 @@ public class ProfileDTO {
     private String fullname;
     private String email;
     private String password;
+    private AuthProviderType authProviderType;
     private String profileImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

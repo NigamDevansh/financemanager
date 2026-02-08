@@ -2,7 +2,7 @@ package com.project.financemanager.dto;
 
 import java.time.LocalDateTime;
 
-import com.project.financemanager.service.AuthProviderType.AuthProviderType;
+import com.project.financemanager.service.Enums.AuthProviderType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

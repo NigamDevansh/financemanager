@@ -1,11 +1,16 @@
 package com.project.financemanager.service;
 
+import com.project.financemanager.dto.AuthDTO;
 import com.project.financemanager.dto.ProfileDTO;
 import com.project.financemanager.entity.ProfileEntity;
 import com.project.financemanager.repository.ProfileRepository;
+import com.project.financemanager.service.Enums.AuthProviderType;
 
+import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +26,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfileEntity = toEntity(profileDTO);
@@ -38,11 +44,16 @@ public class ProfileService {
     }
 
     public ProfileEntity toEntity(ProfileDTO profileDTO) {
+        String encodedPassword = null;
+        if (profileDTO.getAuthProviderType() == AuthProviderType.LOCAL) {
+            encodedPassword = passwordEncoder.encode(profileDTO.getPassword());
+        }
+
         return ProfileEntity.builder()
                 .id(profileDTO.getId())
                 .fullname(profileDTO.getFullname())
                 .email(profileDTO.getEmail())
-                .password(passwordEncoder.encode(profileDTO.getPassword()))
+                .password(encodedPassword)
                 .authProviderType(profileDTO.getAuthProviderType())
                 .profileImageUrl(profileDTO.getProfileImageUrl())
                 .createdAt(profileDTO.getCreatedAt())
@@ -94,5 +105,15 @@ public class ProfileService {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
         }
         return toDTO(currentUser);
+    }
+
+    public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
+            return Map.of("token", "token");
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid credentials");
+        }
     }
 }

@@ -9,6 +9,8 @@ import com.project.financemanager.service.Enums.AuthProviderType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,6 +44,7 @@ public class ProfileEntity {
     private LocalDateTime updatedAt;
     private String activationToken;
     private Boolean isActive;
+    @Enumerated(EnumType.STRING)
     private AuthProviderType authProviderType;
 
     // this is a hook that is called before the entity is created in the table

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import com.project.financemanager.service.Enums.AuthProviderType;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class ProfileDTO {
     private String fullname;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private AuthProviderType authProviderType;
     private String profileImageUrl;
     private LocalDateTime createdAt;

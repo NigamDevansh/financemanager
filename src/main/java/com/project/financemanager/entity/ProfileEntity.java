@@ -53,8 +53,5 @@ public class ProfileEntity {
         if (this.isActive == null) {
             this.isActive = false;
         }
-        if (this.authProviderType == null) {
-            this.authProviderType = AuthProviderType.LOCAL;
-        }
     }
 }

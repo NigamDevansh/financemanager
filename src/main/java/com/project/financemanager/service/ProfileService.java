@@ -5,6 +5,7 @@ import com.project.financemanager.dto.ProfileDTO;
 import com.project.financemanager.entity.ProfileEntity;
 import com.project.financemanager.repository.ProfileRepository;
 import com.project.financemanager.service.Enums.AuthProviderType;
+import com.project.financemanager.util.JwtUtil;
 
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class ProfileService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfileEntity = toEntity(profileDTO);
@@ -44,8 +46,14 @@ public class ProfileService {
     }
 
     public ProfileEntity toEntity(ProfileDTO profileDTO) {
+        AuthProviderType authProvider = profileDTO.getAuthProviderType();
+        if (authProvider == null) {
+            // default to local in case of local login
+            authProvider = AuthProviderType.LOCAL;
+        }
+
         String encodedPassword = null;
-        if (profileDTO.getAuthProviderType() == AuthProviderType.LOCAL) {
+        if (authProvider == AuthProviderType.LOCAL) {
             encodedPassword = passwordEncoder.encode(profileDTO.getPassword());
         }
 
@@ -54,7 +62,7 @@ public class ProfileService {
                 .fullname(profileDTO.getFullname())
                 .email(profileDTO.getEmail())
                 .password(encodedPassword)
-                .authProviderType(profileDTO.getAuthProviderType())
+                .authProviderType(authProvider)
                 .profileImageUrl(profileDTO.getProfileImageUrl())
                 .createdAt(profileDTO.getCreatedAt())
                 .updatedAt(profileDTO.getUpdatedAt())
@@ -96,7 +104,7 @@ public class ProfileService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 
-    public ProfileDTO getCurrentProfileDTO(String email) {
+    public ProfileDTO getPublicProfile(String email) {
         ProfileEntity currentUser = null;
         if (email == null) {
             currentUser = getCurrentProfile();
@@ -109,9 +117,13 @@ public class ProfileService {
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
         try {
+            String token = jwtUtil.generateToken(authDTO.getEmail());
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
-            return Map.of("token", "token");
+            return Map.of(
+                    "token", token,
+                    "user", getPublicProfile(authDTO.getEmail()));
         } catch (Exception e) {
             throw new RuntimeException("Invalid credentials");
         }

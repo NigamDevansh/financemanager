@@ -32,7 +32,6 @@ public class CategoryEntity {
     private LocalDateTime updatedAt;
 
     private String type;
-
     private String icon;
 
     @ManyToOne(fetch = FetchType.LAZY)

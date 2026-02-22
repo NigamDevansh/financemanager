@@ -3,12 +3,14 @@ package com.project.financemanager.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.project.financemanager.dto.ExpenseDTO;
 import com.project.financemanager.dto.IncomeDTO;
 import com.project.financemanager.entity.CategoryEntity;
+import com.project.financemanager.entity.ExpenseEntity;
 import com.project.financemanager.entity.IncomeEntity;
 import com.project.financemanager.entity.ProfileEntity;
 import com.project.financemanager.repository.CategoryRepository;
@@ -65,7 +67,7 @@ public class IncomeService {
         LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
         List<IncomeEntity> incomes = incomeRepository.findByProfileIdAndDateBetween(profile.getId(), startOfMonth,
                 endOfMonth);
-        return incomes.stream().map(this::toDTO).collect(Collectors.toList());
+        return incomes.stream().map(this::toDTO).toList();
     }
 
     // Delete income by id
@@ -91,5 +93,13 @@ public class IncomeService {
         ProfileEntity profile = profileService.getCurrentProfile();
         BigDecimal totalIncome = incomeRepository.findTotalIncomeByProfileId(profile.getId());
         return totalIncome != null ? totalIncome : BigDecimal.ZERO;
+    }
+
+    // Filter incomes
+    public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
+                profile.getId(), startDate, endDate, keyword, sort);
+        return list.stream().map(this::toDTO).toList();
     }
 }

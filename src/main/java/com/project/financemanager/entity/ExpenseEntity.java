@@ -1,6 +1,7 @@
 package com.project.financemanager.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,7 +35,7 @@ public class ExpenseEntity {
     private Long id;
     private String name;
     private String icon;
-    private LocalDateTime date;
+    private LocalDate date;
     private BigDecimal amount;
 
     @Column(updatable = false)
@@ -54,7 +55,7 @@ public class ExpenseEntity {
     @PrePersist
     public void prePersist() {
         if (this.date == null) {
-            this.date = LocalDateTime.now();
+            this.date = LocalDate.now();
         }
     }
 }

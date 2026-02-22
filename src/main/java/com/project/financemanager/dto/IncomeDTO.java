@@ -1,6 +1,7 @@
 package com.project.financemanager.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class IncomeDTO {
     private Long id;
     private String name;
     private String icon;
-    private LocalDateTime date;
+    private LocalDate date;
     private BigDecimal amount;
     private Long categoryId;
     private String categoryName;

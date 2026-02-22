@@ -2,7 +2,6 @@ package com.project.financemanager.repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -30,8 +29,8 @@ public interface IncomeRepository extends JpaRepository<IncomeEntity, Long> {
         // and name like ?4 and keyword like ?5 order by date desc
         List<IncomeEntity> findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
                         Long profileId,
-                        LocalDateTime startDate,
-                        LocalDateTime endDate,
+                        LocalDate startDate,
+                        LocalDate endDate,
                         String keyword,
                         Sort sort);
 

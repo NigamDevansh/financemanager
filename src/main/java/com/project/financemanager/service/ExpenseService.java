@@ -3,9 +3,9 @@ package com.project.financemanager.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import com.project.financemanager.dto.ExpenseDTO;
 import com.project.financemanager.entity.CategoryEntity;
@@ -65,7 +65,7 @@ public class ExpenseService {
         LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
         List<ExpenseEntity> expenses = expenseRepository.findByProfileIdAndDateBetween(profile.getId(), startOfMonth,
                 endOfMonth);
-        return expenses.stream().map(this::toDTO).collect(Collectors.toList());
+        return expenses.stream().map(this::toDTO).toList();
     }
 
     // Delete expense by id
@@ -91,5 +91,13 @@ public class ExpenseService {
         ProfileEntity profile = profileService.getCurrentProfile();
         BigDecimal totalExpense = expenseRepository.findTotalExpenseByProfileId(profile.getId());
         return totalExpense != null ? totalExpense : BigDecimal.ZERO;
+    }
+
+    // Filter expenses
+    public List<ExpenseDTO> filterExpenses(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<ExpenseEntity> list = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
+                profile.getId(), startDate, endDate, keyword, sort);
+        return list.stream().map(this::toDTO).toList();
     }
 }

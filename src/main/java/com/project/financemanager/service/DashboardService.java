@@ -59,10 +59,10 @@ public class DashboardService {
                     return cmp;
                 }).collect(Collectors.toList());
         returnValue.put("totalBalance",
-                incomeService.getTotalIncomeForCurrentUser()
-                        .subtract(expenseService.getTotalExpenseForCurrentUser()));
-        returnValue.put("totalIncome", incomeService.getTotalIncomeForCurrentUser());
-        returnValue.put("totalExpense", expenseService.getTotalExpenseForCurrentUser());
+                incomeService.getTotalIncomesForCurrentUser()
+                        .subtract(expenseService.getTotalExpensesForCurrentUser()));
+        returnValue.put("totalIncome", incomeService.getTotalIncomesForCurrentUser());
+        returnValue.put("totalExpense", expenseService.getTotalExpensesForCurrentUser());
         returnValue.put("recent5Expenses", latestExpenses);
         returnValue.put("recent5Incomes", latestIncomes);
         returnValue.put("recentTransactions", recentTransactions);

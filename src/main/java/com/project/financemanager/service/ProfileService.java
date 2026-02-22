@@ -117,10 +117,9 @@ public class ProfileService {
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
         try {
-            String token = jwtUtil.generateToken(authDTO.getEmail());
-
-            Authentication authentication = authenticationManager.authenticate(
+            authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
+            String token = jwtUtil.generateToken(authDTO.getEmail());
             return Map.of(
                     "token", token,
                     "user", getPublicProfile(authDTO.getEmail()));

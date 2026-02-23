@@ -59,7 +59,7 @@ public class ProfileService {
 
         return ProfileEntity.builder()
                 .id(profileDTO.getId())
-                .fullname(profileDTO.getFullname())
+                .fullName(profileDTO.getFullName())
                 .email(profileDTO.getEmail())
                 .password(encodedPassword)
                 .authProviderType(authProvider)
@@ -72,7 +72,7 @@ public class ProfileService {
     public ProfileDTO toDTO(ProfileEntity profileEntity) {
         return ProfileDTO.builder()
                 .id(profileEntity.getId())
-                .fullname(profileEntity.getFullname())
+                .fullName(profileEntity.getFullName())
                 .email(profileEntity.getEmail())
                 .authProviderType(profileEntity.getAuthProviderType())
                 .profileImageUrl(profileEntity.getProfileImageUrl())

@@ -7,10 +7,8 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.project.financemanager.dto.ExpenseDTO;
 import com.project.financemanager.dto.IncomeDTO;
 import com.project.financemanager.entity.CategoryEntity;
-import com.project.financemanager.entity.ExpenseEntity;
 import com.project.financemanager.entity.IncomeEntity;
 import com.project.financemanager.entity.ProfileEntity;
 import com.project.financemanager.repository.CategoryRepository;
@@ -100,6 +98,11 @@ public class IncomeService {
         ProfileEntity profile = profileService.getCurrentProfile();
         List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
                 profile.getId(), startDate, endDate, keyword, sort);
+        return list.stream().map(this::toDTO).toList();
+    }
+
+    public List<IncomeDTO> getIncomesForUserOnDate(Long profileId, LocalDate date) {
+        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDate(profileId, date);
         return list.stream().map(this::toDTO).toList();
     }
 }

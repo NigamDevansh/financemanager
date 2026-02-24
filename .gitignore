@@ -33,4 +33,8 @@ build/
 ### VS Code ###
 .vscode/
 
+### Secrets ###
+.env
+src/main/resources/application-prod.properties
+
 *.json

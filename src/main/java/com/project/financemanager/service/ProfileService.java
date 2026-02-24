@@ -10,6 +10,7 @@ import com.project.financemanager.util.JwtUtil;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,13 +31,16 @@ public class ProfileService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
+    @Value("${financemanager.activation.uri}")
+    private String activationBaseUrl;
+
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfileEntity = toEntity(profileDTO);
         newProfileEntity.setActivationToken(UUID.randomUUID().toString());
         newProfileEntity = profileRepository.save(newProfileEntity);
 
         // send activation email
-        String activationLink = "http://localhost:8080/api/v1/activate?token="
+        String activationLink = activationBaseUrl + "/api/v1/activate?token="
                 + newProfileEntity.getActivationToken();
         String subject = "Activate your personal money manager account :) ";
         String body = "Please click the link below to activate your account:\n\n" + activationLink;

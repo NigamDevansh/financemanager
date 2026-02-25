@@ -35,6 +35,5 @@ build/
 
 ### Secrets ###
 .env
-src/main/resources/application-prod.properties
 
 *.json

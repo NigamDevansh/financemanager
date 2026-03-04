@@ -2,11 +2,16 @@ package com.project.financemanager.service;
 
 import com.project.financemanager.dto.AuthDTO;
 import com.project.financemanager.dto.ProfileDTO;
+import com.project.financemanager.entity.EmailOutboxEntity;
 import com.project.financemanager.entity.ProfileEntity;
+import com.project.financemanager.repository.EmailOutboxRepository;
 import com.project.financemanager.repository.ProfileRepository;
 import com.project.financemanager.service.Enums.AuthProviderType;
+import com.project.financemanager.service.Enums.EmailStatus;
+import com.project.financemanager.service.Enums.EmailType;
 import com.project.financemanager.util.JwtUtil;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
-    private final EmailService emailService;
+    private final EmailOutboxRepository emailOutboxRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
@@ -34,17 +40,23 @@ public class ProfileService {
     @Value("${financemanager.activation.uri}")
     private String activationBaseUrl;
 
+    @Transactional
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
         ProfileEntity newProfileEntity = toEntity(profileDTO);
         newProfileEntity.setActivationToken(UUID.randomUUID().toString());
         newProfileEntity = profileRepository.save(newProfileEntity);
 
-        // send activation email
-        String activationLink = activationBaseUrl + "/api/v1/activate?token="
-                + newProfileEntity.getActivationToken();
-        String subject = "Activate your personal money manager account :) ";
-        String body = "Please click the link below to activate your account:\n\n" + activationLink;
-        emailService.sendEmail(newProfileEntity.getEmail(), subject, body);
+        // save activation email to outbox (sent asynchronously by worker)
+        EmailOutboxEntity outbox = EmailOutboxEntity.builder()
+                .recipient(newProfileEntity.getEmail())
+                .emailType(EmailType.ACTIVATION)
+                .payload("{\"activationToken\":\"" + newProfileEntity.getActivationToken() + "\"}")
+                .status(EmailStatus.PENDING)
+                .retryCount(0)
+                .maxRetries(3)
+                .nextRetryAt(LocalDateTime.now())
+                .build();
+        emailOutboxRepository.save(outbox);
 
         return toDTO(newProfileEntity);
     }

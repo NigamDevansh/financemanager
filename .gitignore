@@ -37,4 +37,7 @@ build/
 .env
 
 *.json
+!frontend/package.json
 !frontend/tsconfig.json
+!frontend/package-lock.json
+!frontend/vite.config.ts

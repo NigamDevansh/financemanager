@@ -3,9 +3,12 @@ import TransactionInfoCard from "./TransactionInfoCard";
 import moment from "moment";
 import { useState } from "react";
 import type { IncomeListProps } from "../types";
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
 
 const IncomeList = ({ transactions, onDelete, onDownload, onEmail }: IncomeListProps) => {
     const [loading, setLoading] = useState(false);
+    
     const handleEmail = async () => {
         setLoading(true);
         try {
@@ -14,6 +17,7 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }: IncomeListP
             setLoading(false);
         }
     }
+    
     const handleDownload = async () => {
         setLoading(true);
         try {
@@ -22,56 +26,47 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }: IncomeListP
             setLoading(false);
         }
     }
+    
     return (
-        <div className="card">
-            <div className="flex items-center justify-between">
-                <h5 className="text-lg">Income Sources</h5>
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-4">
+                <CardTitle className="text-lg font-medium">Income Sources</CardTitle>
                 <div className="flex items-center justify-end gap-2">
-                    <button disabled={loading} className="card-btn" onClick={handleEmail}>
+                    <Button variant="outline" size="sm" disabled={loading} onClick={handleEmail} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
                         {loading ? (
-                            <>
-                                <LoaderCircle className="w-4 h-4 animate-spin" />
-                                Emailing...
-                            </>
+                            <LoaderCircle className="w-4 h-4 animate-spin" />
                         ) : (
-                            <>
-                                <Mail size={15} className="text-base" />
-                                Email
-                            </>
+                            <Mail size={15} />
                         )}
-                    </button>
-                    <button disabled={loading} className="card-btn" onClick={handleDownload}>
+                        {loading ? 'Emailing...' : 'Email'}
+                    </Button>
+                    <Button variant="outline" size="sm" disabled={loading} onClick={handleDownload} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
                         {loading ? (
-                            <>
-                                <LoaderCircle className="w-4 h-4 animate-spin" />
-                                Downloading...
-                            </>
+                            <LoaderCircle className="w-4 h-4 animate-spin" />
                         ) : (
-                            <>
-                                <Download size={15} className="text-base" />
-                                Download
-                            </>
+                            <Download size={15} />
                         )}
-
-                    </button>
+                        {loading ? 'Downloading...' : 'Download'}
+                    </Button>
                 </div>
-            </div>
+            </CardHeader>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* display the incomes */}
-                {transactions?.map((income) => (
-                    <TransactionInfoCard
-                        key={income.id}
-                        title={income.name}
-                        icon={income.icon}
-                        date={moment(income.date).format('Do MMM YYYY')}
-                        amount={income.amount}
-                        type="income"
-                        onDelete={() => onDelete(income.id)}
-                    />
-                ))}
-            </div>
-        </div>
+            <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {transactions?.map((income) => (
+                        <TransactionInfoCard
+                            key={income.id}
+                            title={income.name}
+                            icon={income.icon}
+                            date={moment(income.date).format('Do MMM YYYY')}
+                            amount={income.amount}
+                            type="income"
+                            onDelete={() => onDelete(income.id)}
+                        />
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
     )
 }
 

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 import type { DeleteAlertProps } from "../types";
+import { Button } from "./ui/button";
 
 const DeleteAlert = ({ content, onDelete }: DeleteAlertProps) => {
     const [loading, setLoading] = useState(false);
+    
     const handleDelete = async () => {
         setLoading(true);
         try {
@@ -12,26 +14,26 @@ const DeleteAlert = ({ content, onDelete }: DeleteAlertProps) => {
             setLoading(false);
         }
     }
+    
     return (
         <div>
-            <p className="text-sm">{content}</p>
+            <p className="text-sm text-muted-foreground">{content}</p>
             <div className="flex justify-end mt-6">
-                <button
+                <Button
                     onClick={handleDelete}
                     disabled={loading}
-                    type="button"
-                    className="add-btn add-btn-fill">
+                    variant="destructive"
+                    className="flex items-center gap-2"
+                >
                     {loading ? (
                         <>
-                            <LoaderCircle className="h-4 w-4 animated-spin" />
+                            <LoaderCircle className="h-4 w-4 animate-spin" />
                             Deleting...
                         </>
                     ) : (
-                        <>
-                            Delete
-                        </>
+                        "Delete"
                     )}
-                </button>
+                </Button>
             </div>
         </div>
     )

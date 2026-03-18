@@ -1,44 +1,54 @@
 import { Trash2, TrendingDown, TrendingUp, UtensilsCrossed } from "lucide-react";
 import { addThousandsSeparator } from "../util/util";
 import type { TransactionInfoCardProps } from "../types";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 
 const TransactionInfoCard = ({ icon, title, date, amount, type, hideDeleteBtn, onDelete }: TransactionInfoCardProps) => {
-    const getAmountStyles = () => type === 'income' ? 'bg-green-50  text-green-800' : 'bg-red-50 text-red-800';
     return (
-        <div className="group relative flex items-center gap-4 mt-2 p-3 rounded-lg hover:bg-gray-100/60">
-            <div className="w-12 h-12 flex items-center justify-center text-xl text-gray-800 bg-gray-100 rounded-full">
+        <div className="group relative flex items-center gap-4 mt-2 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-border">
+            <div className="w-12 h-12 flex items-center justify-center text-xl text-foreground bg-accent/50 rounded-full border border-border/50">
                 {icon ? (
-                    <img src={icon} alt={title} className="w-6 h-6" />
+                    <img src={icon} alt={title} className="w-6 h-6 object-contain" />
                 ) : (
-                    <UtensilsCrossed className="text-purple-800" />
+                    <UtensilsCrossed className="text-muted-foreground" />
                 )}
             </div>
 
             <div className="flex-1 flex items-center justify-between">
                 <div>
-                    <p className="text-sm text-gray-700 font-medium">{title}</p>
-                    <p className="text-xs text-gray-400 mt-1">{date}</p>
+                    <p className="text-sm text-foreground font-medium">{title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{date}</p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     {!hideDeleteBtn && (
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={onDelete}
-                            className="text-gray-400 hover:text-red-800 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                            <Trash2 size={18} />
-                        </button>
+                            className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8">
+                            <Trash2 size={16} />
+                        </Button>
                     )}
 
-                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-md ${getAmountStyles()}`}>
-                        <h6 className="text-xs font-medium">
-                            {type === 'income' ? '+' : '-'} ${addThousandsSeparator(amount)}
+                    <Badge 
+                        variant="outline" 
+                        className={`flex items-center gap-1.5 px-2.5 py-1 ${
+                            type === 'income' 
+                                ? 'bg-income/30 text-emerald-700 border-income hover:bg-income/40 dark:text-emerald-400' 
+                                : 'bg-expense/30 text-rose-700 border-expense hover:bg-expense/40 dark:text-rose-400'
+                        }`}
+                    >
+                        <h6 className="text-xs font-semibold">
+                            {type === 'income' ? '+' : '-'} &#8377;{addThousandsSeparator(amount)}
                         </h6>
                         {type === 'income' ? (
-                            <TrendingUp size={15} />
+                            <TrendingUp size={14} />
                         ) : (
-                            <TrendingDown size={15} />
+                            <TrendingDown size={14} />
                         )}
-                    </div>
+                    </Badge>
                 </div>
             </div>
         </div>

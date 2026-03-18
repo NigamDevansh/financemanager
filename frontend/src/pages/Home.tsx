@@ -46,41 +46,46 @@ const Home = () => {
     return (
         <div>
             <Dashboard activeMenu="Dashboard">
-                <div className="my-5 mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         {/* Display the cards*/}
                         <InfoCard
                             icon={<WalletCards />}
                             label="Total Balance"
                             value={addThousandsSeparator(dashboardData?.totalBalance || 0)}
-                            color="bg-purple-800"
+                            color="bg-gradient-to-br from-violet-400 to-indigo-600 shadow-indigo-500/40"
                         />
                         <InfoCard
                             icon={<Wallet />}
                             label="Total Income"
                             value={addThousandsSeparator(dashboardData?.totalIncome || 0)}
-                            color="bg-green-800"
+                            color="bg-gradient-to-br from-emerald-400 to-teal-600 shadow-teal-500/40"
                         />
                         <InfoCard
                             icon={<Coins />}
                             label="Total Expense"
                             value={addThousandsSeparator(dashboardData?.totalExpense || 0)}
-                            color="bg-red-800"
+                            color="bg-gradient-to-br from-rose-400 to-pink-600 shadow-pink-500/40"
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Recent transactions */}
-                        <RecentTransactions
-                            transactions={dashboardData?.recentTransactions || []}
-                            onMore={() => navigate("/expense")}
-                        />
+                        <div className="md:col-span-2 lg:col-span-1">
+                            <RecentTransactions
+                                transactions={dashboardData?.recentTransactions || []}
+                                onMore={() => navigate("/expense")}
+                            />
+                        </div>
 
                         {/* finance overview chart */}
-                        <FinanceOverview
-                            totalBalance={dashboardData?.totalBalance || 0}
-                            totalIncome={dashboardData?.totalIncome || 0}
-                            totalExpense={dashboardData?.totalExpense || 0}
-                        />
+                        <div className="md:col-span-2 lg:col-span-1">
+                            <FinanceOverview
+                                totalBalance={dashboardData?.totalBalance || 0}
+                                totalIncome={dashboardData?.totalIncome || 0}
+                                totalExpense={dashboardData?.totalExpense || 0}
+                            />
+                        </div>
 
                         {/* Expense transactions */}
                         <Transactions

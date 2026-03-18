@@ -8,6 +8,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { Toaster } from "react-hot-toast";
 import LandingPage from "./pages/LandingPage";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
+import LearnMore from "./pages/LearnMore";
 
 const App = () => {
     return (
@@ -17,6 +20,9 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Root />} />
                     <Route path="/home" element={<LandingPage />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/contact" element={<ContactUs />} />
+                    <Route path="/learn-more" element={<LearnMore />} />
                     <Route path="/dashboard" element={<Home />} />
                     <Route path="/income" element={<Income />} />
                     <Route path="/expense" element={<Expense />} />

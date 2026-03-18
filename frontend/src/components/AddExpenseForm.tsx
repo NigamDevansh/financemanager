@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import EmojiPickerPopup from "./EmojiPickerPopup";
 import Input from "./Input";
 import type { AddExpenseFormProps, ExpenseFormData } from "../types";
+import { Button } from "./ui/button";
 
 const AddExpenseForm = ({ onAddExpense, categories }: AddExpenseFormProps) => {
     const [expense, setExpense] = useState<ExpenseFormData>({
@@ -28,7 +29,7 @@ const AddExpenseForm = ({ onAddExpense, categories }: AddExpenseFormProps) => {
     }));
 
     return (
-        <div>
+        <div className="p-4">
             <EmojiPickerPopup
                 icon={expense.icon}
                 onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
@@ -68,13 +69,13 @@ const AddExpenseForm = ({ onAddExpense, categories }: AddExpenseFormProps) => {
             />
 
             <div className="flex justify-end mt-6">
-                <button
+                <Button
                     type="button"
-                    className="add-btn add-btn-fill"
+                    className="flex items-center gap-2"
                     onClick={() => onAddExpense(expense)}
                 >
                     Add Expense
-                </button>
+                </Button>
             </div>
         </div>
     );

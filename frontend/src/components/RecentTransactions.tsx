@@ -2,32 +2,35 @@ import { ArrowRight } from "lucide-react";
 import TransactionInfoCard from "./TransactionInfoCard";
 import moment from "moment";
 import type { RecentTransactionsProps } from "../types";
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
 
 const RecentTransactions = ({ transactions, onMore }: RecentTransactionsProps) => {
     return (
-        <div className="card">
-            <div className="flex items-center justify-between">
-                <h4 className="text-lg">Recent Transactions</h4>
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-lg font-medium">Recent Transactions</CardTitle>
+                <Button variant="outline" size="sm" onClick={onMore} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
+                    More <ArrowRight size={15} />
+                </Button>
+            </CardHeader>
 
-                <button className="card-btn" onClick={onMore}>
-                    More <ArrowRight className="text-base" size={15} />
-                </button>
-            </div>
-
-            <div className="mt-6">
-                {transactions?.slice(0, 5)?.map(item => (
-                    <TransactionInfoCard
-                        key={item.id}
-                        title={item.name}
-                        icon={item.icon}
-                        date={moment(item.date).format("Do MMM YYYY")}
-                        amount={item.amount}
-                        type={item.type || "income"}
-                        hideDeleteBtn
-                    />
-                ))}
-            </div>
-        </div>
+            <CardContent>
+                <div className="mt-2 flex flex-col gap-2">
+                    {transactions?.slice(0, 5)?.map(item => (
+                        <TransactionInfoCard
+                            key={item.id}
+                            title={item.name}
+                            icon={item.icon}
+                            date={moment(item.date).format("Do MMM YYYY")}
+                            amount={item.amount}
+                            type={item.type || "income"}
+                            hideDeleteBtn
+                        />
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
     )
 }
 

@@ -3,6 +3,7 @@ import EmojiPickerPopup from "./EmojiPickerPopup";
 import Input from "./Input";
 import { LoaderCircle } from "lucide-react";
 import type { AddIncomeFormProps, IncomeFormData } from "../types";
+import { Button } from "./ui/button";
 
 const AddIncomeForm = ({ onAddIncome, categories }: AddIncomeFormProps) => {
     const [income, setIncome] = useState<IncomeFormData>({
@@ -39,7 +40,7 @@ const AddIncomeForm = ({ onAddIncome, categories }: AddIncomeFormProps) => {
     }, [categories, income.categoryId]);
 
     return (
-        <div>
+        <div className="p-4">
             <EmojiPickerPopup
                 icon={income.icon}
                 onSelect={(selectedIcon) => handleChange('icon', selectedIcon)}
@@ -78,10 +79,10 @@ const AddIncomeForm = ({ onAddIncome, categories }: AddIncomeFormProps) => {
             />
 
             <div className="flex justify-end mt-6">
-                <button
+                <Button
                     onClick={handleAddIncome}
                     disabled={loading}
-                    className="add-btn add-btn-fill">
+                    className="flex items-center gap-2">
                     {loading ? (
                         <>
                             <LoaderCircle className="w-4 h-4 animate-spin" />
@@ -92,7 +93,7 @@ const AddIncomeForm = ({ onAddIncome, categories }: AddIncomeFormProps) => {
                             Add Income
                         </>
                     )}
-                </button>
+                </Button>
             </div>
         </div>
     )

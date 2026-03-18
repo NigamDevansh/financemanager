@@ -3,6 +3,8 @@ import { Plus } from "lucide-react";
 import CustomLineChart from "./CustomLineChart";
 import { prepareIncomeLineChartData } from "../util/util";
 import type { ExpenseOverviewProps, ChartDataPoint } from "../types";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import { Button } from "./ui/button";
 
 const ExpenseOverview = ({ transactions, onExpenseIncome }: ExpenseOverviewProps) => {
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
@@ -15,26 +17,25 @@ const ExpenseOverview = ({ transactions, onExpenseIncome }: ExpenseOverviewProps
     }, [transactions]);
 
     return (
-        <div className="card">
-            <div className="flex items-center justify-between">
-                <div className="">
-                    <h5 className="text-lg">Expense Overview</h5>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                        Track your spending trends over time and gain insights into where
-                        your money goes.
-                    </p>
+        <Card>
+            <CardHeader className="flex flex-row items-start justify-between pb-8">
+                <div className="space-y-1">
+                    <CardTitle className="text-lg font-medium">Expense Overview</CardTitle>
+                    <CardDescription className="text-xs">
+                        Track your spending trends over time and gain insights into where your money goes.
+                    </CardDescription>
                 </div>
 
-                <button className="add-btn" onClick={onExpenseIncome}>
-                    <Plus size={15} className="text-lg" />
-                    Add Expense
-                </button>
-            </div>
-
-            <div className="mt-10">
-                <CustomLineChart data={chartData} />
-            </div>
-        </div>
+                <Button onClick={onExpenseIncome} className="flex items-center gap-1.5" variant="destructive">
+                    <Plus size={15} /> Add Expense
+                </Button>
+            </CardHeader>
+            <CardContent>
+                <div className="w-full mt-4">
+                    <CustomLineChart data={chartData} />
+                </div>
+            </CardContent>
+        </Card>
     );
 };
 

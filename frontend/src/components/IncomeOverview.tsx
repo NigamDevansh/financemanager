@@ -3,6 +3,8 @@ import { prepareIncomeLineChartData } from "../util/util";
 import CustomLineChart from "./CustomLineChart";
 import { Plus } from "lucide-react";
 import type { IncomeOverviewProps, ChartDataPoint } from "../types";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import { Button } from "./ui/button";
 
 const IncomeOverview = ({ transactions, onAddIncome }: IncomeOverviewProps) => {
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
@@ -13,25 +15,26 @@ const IncomeOverview = ({ transactions, onAddIncome }: IncomeOverviewProps) => {
 
         return () => { };
     }, [transactions]);
+    
     return (
-        <div className="card">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h5 className="text-lg">
-                        Income Overview
-                    </h5>
-                    <p className="text-xs text-gray-400 mt-0 5">
+        <Card>
+            <CardHeader className="flex flex-row items-start justify-between pb-8">
+                <div className="space-y-1">
+                    <CardTitle className="text-lg font-medium">Income Overview</CardTitle>
+                    <CardDescription className="text-xs">
                         Track your earnings over time and analyze your income trends.
-                    </p>
+                    </CardDescription>
                 </div>
-                <button className="add-btn" onClick={onAddIncome}>
-                    <Plus size={15} className="text-lg" /> Add Income
-                </button>
-            </div>
-            <div className="mt-10">
-                <CustomLineChart data={chartData} />
-            </div>
-        </div>
+                <Button onClick={onAddIncome} className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white">
+                    <Plus size={15} /> Add Income
+                </Button>
+            </CardHeader>
+            <CardContent>
+                <div className="w-full mt-4">
+                    <CustomLineChart data={chartData} />
+                </div>
+            </CardContent>
+        </Card>
     )
 }
 

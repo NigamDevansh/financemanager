@@ -10,6 +10,8 @@ import { LoaderCircle } from "lucide-react";
 import ProfilePhotoSelector from "../components/ProfilePhotoSelector";
 import uploadProfileImage from "../util/uploadProfileImage";
 import Header from "../components/Header";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 
 const Signup = () => {
     const [fullName, setFullName] = useState("");
@@ -74,22 +76,23 @@ const Signup = () => {
     }
 
     return (
-        <div className="h-screen w-full flex flex-col">
+        <div className="min-h-screen w-full flex flex-col bg-background">
             <Header />
-            <div className="flex-grow w-full relative flex items-center justify-center overflow-hidden">
+            <div className="flex-grow w-full relative flex items-center justify-center p-4">
                 {/* Background image with blur*/}
-                <img src={assets.login_bg} alt="Background" className="absolute inset-0 w-full h-full object-cover filter blur-sm" />
+                <img src={assets.login_bg} alt="Background" className="absolute inset-0 w-full h-full object-cover filter blur-[4px] opacity-40 mix-blend-multiply" />
 
-                <div className="relative z-10 w-full max-w-lg px-6">
-
-                    <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
-                        <h3 className="text-2xl font-semibold text-black text-center mb-2">
+                <Card className="relative z-10 w-full max-w-lg shadow-2xl border-border bg-card/95 backdrop-blur-[2px] overflow-hidden my-4">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-2xl font-semibold text-center">
                             Create An Account
-                        </h3>
-                        <p className="text-sm text-slate-700 text-center mb-8">
+                        </CardTitle>
+                        <CardDescription className="text-center text-sm">
                             Start tracking your spendings by joining with us.
-                        </p>
-
+                        </CardDescription>
+                    </CardHeader>
+                    
+                    <CardContent className="max-h-[75vh] overflow-y-auto px-6 pb-6">
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="flex justify-center mb-6">
                                 <ProfilePhotoSelector image={profilePhoto} setImage={setProfilePhoto} />
@@ -123,32 +126,29 @@ const Signup = () => {
 
                             </div>
                             {error && (
-                                <p className="text-red-800 text-sm text-center bg-red-50 p-2 rounded">
+                                <p className="text-destructive text-sm text-center bg-destructive/10 p-2 rounded-md border border-destructive/20 font-medium">
                                     {error}
                                 </p>
                             )}
 
-                            <button disabled={isLoading} className={`btn-primary w-full py-3 text-lg font-medium flex items-center justify-center gap-2 ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`} type="submit">
+                            <Button disabled={isLoading} className="w-full py-5 text-base font-medium mt-2" type="submit">
                                 {isLoading ? (
                                     <>
-                                        <LoaderCircle className="animate-spin w-5 h-5" />
+                                        <LoaderCircle className="animate-spin w-5 h-5 mr-2" />
                                         Signing Up...
                                     </>
                                 ) : (
                                     "SIGN UP"
                                 )}
-                            </button>
+                            </Button>
 
-                            <p className="text-sm text-slate-800 text-center mt-6">
-                                Already have an account?
-                                <Link to="/login" className="font-medium text-primary underline hover:text-primary-dark transition-colors">Login</Link>
+                            <p className="text-sm text-muted-foreground text-center mt-6">
+                                Already have an account?{" "}
+                                <Link to="/login" className="font-medium text-primary hover:underline transition-all">Login</Link>
                             </p>
                         </form>
-                    </div>
-
-                </div>
-
-
+                    </CardContent>
+                </Card>
             </div>
         </div>
     )

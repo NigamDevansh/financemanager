@@ -1,39 +1,22 @@
-import { X } from "lucide-react";
 import type { ModalProps } from "../types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
 const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
-    if (!isOpen) return null;
-
     return (
-        <div
-            className="fixed inset-0 z-50 flex justify-center items-center w-full h-full overflow-hidden bg-black/40
-      backdrop-blur-sm"
-        >
-            <div className="relative p-4 w-full max-w-2xl max-h-[90vh]">
-                {/* Modal header */}
-                <div className="relative bg-white rounded-xl shadow-2xl border border-gray-100">
-                    {/* Modal content */}
-                    <div className="flex items-center justify-between p-5 md:p-6 border-b border-gray-100 rounded-t-xl">
-                        <h3 className="text-xl font-semibold text-gray-800">
-                            {title}
-                        </h3>
-
-                        <button
-                            type="button"
-                            className="text-gray-500 bg-gray-50 hover:bg-gray-100 hover:text-gray-700 rounded-lg text-sm w-9 h-9 flex justify-center items-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                            onClick={onClose}
-                        >
-                            <X className="w-4 h-4" />
-                        </button>
-                    </div>
-
-                    {/*Modal body*/}
-                    <div className="p-5 md:p-6 text-gray-700">
-                        {children}
-                    </div>
+        <Dialog open={isOpen} onOpenChange={(open) => {
+            if (!open) onClose();
+        }}>
+            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw]">
+                {title && (
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-semibold">{title}</DialogTitle>
+                    </DialogHeader>
+                )}
+                <div className="mt-2 text-foreground">
+                    {children}
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 };
 

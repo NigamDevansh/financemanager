@@ -20,7 +20,7 @@ const Header = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2">
                         <img src={assets.logo} alt="logo" className="h-10 w-10" />
-                        <span className="text-lg font-bold text-foreground truncate">Finance Manager App</span>
+                        <span className="text-base sm:text-lg font-bold text-foreground truncate">Finance Manager App</span>
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -34,7 +34,7 @@ const Header = () => {
 
                     {/* Action Buttons & Hamburger Menu */}
                     <div className="flex items-center space-x-4">
-                        <div className="hidden sm:flex items-center space-x-3">
+                        <div className="hidden lg:flex items-center space-x-3">
                             <Button variant="ghost" asChild>
                                 <Link to="/login">Login</Link>
                             </Button>

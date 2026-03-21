@@ -49,7 +49,7 @@ const CategoryList = ({ categories, onEditCategory }: CategoryListProps) => {
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => onEditCategory(category)}
-                                            className="h-8 w-8 text-muted-foreground hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                                            className="h-8 w-8 text-muted-foreground hover:text-primary opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                             <Pencil size={15} />
                                         </Button>
                                     </div>

@@ -29,7 +29,7 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }: IncomeListP
     
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-4">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4">
                 <CardTitle className="text-lg font-medium">Income Sources</CardTitle>
                 <div className="flex items-center justify-end gap-2">
                     <Button variant="outline" size="sm" disabled={loading} onClick={handleEmail} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
@@ -38,7 +38,7 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }: IncomeListP
                         ) : (
                             <Mail size={15} />
                         )}
-                        {loading ? 'Emailing...' : 'Email'}
+                        <span className="hidden sm:inline">{loading ? 'Emailing...' : 'Email'}</span>
                     </Button>
                     <Button variant="outline" size="sm" disabled={loading} onClick={handleDownload} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
                         {loading ? (
@@ -46,7 +46,7 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }: IncomeListP
                         ) : (
                             <Download size={15} />
                         )}
-                        {loading ? 'Downloading...' : 'Download'}
+                        <span className="hidden sm:inline">{loading ? 'Downloading...' : 'Download'}</span>
                     </Button>
                 </div>
             </CardHeader>

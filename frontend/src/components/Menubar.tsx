@@ -47,7 +47,7 @@ const Menubar = ({ activeMenu }: MenubarProps) => {
 
                 <div className="flex items-center gap-2">
                     <img src={assets.logo} alt="logo" className="h-10 w-10" />
-                    <span className="text-lg font-medium text-foreground truncate">Finance Manager App</span>
+                    <span className="hidden sm:inline text-lg font-medium text-foreground truncate">Finance Manager App</span>
                 </div>
             </div>
 

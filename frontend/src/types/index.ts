@@ -276,6 +276,4 @@ export interface FilterRequest {
 
 export interface Assets {
     logo: string;
-    login_bg: string;
-    landing: string;
 }

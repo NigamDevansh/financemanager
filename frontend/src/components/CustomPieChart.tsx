@@ -13,7 +13,7 @@ import type { CustomPieChartProps } from "../types";
 const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors }: CustomPieChartProps) => {
 
     return (
-        <ResponsiveContainer width="100%" height={380}>
+        <ResponsiveContainer width="100%" height={300}>
             <PieChart>
                 <Pie
                     data={data}
@@ -21,8 +21,8 @@ const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors }: Cu
                     nameKey="name"
                     cx="50%"
                     cy="50%"
-                    outerRadius={130}
-                    innerRadius={100}
+                    outerRadius={100}
+                    innerRadius={75}
                     labelLine={false}
                 >
                     {data.map((_entry, index) => (

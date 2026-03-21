@@ -8,14 +8,14 @@ import { Button } from "./ui/button";
 const ExpenseList = ({ transactions, onDelete, onDownload, onEmail }: ExpenseListProps) => {
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-4">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4">
                 <CardTitle className="text-lg font-medium">All Expenses</CardTitle>
                 <div className="flex items-center justify-end gap-2">
                     <Button variant="outline" size="sm" onClick={onEmail} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                        <Mail size={15} /> Email
+                        <Mail size={15} /> <span className="hidden sm:inline">Email</span>
                     </Button>
                     <Button variant="outline" size="sm" onClick={onDownload} className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-                        <Download size={15} /> Download
+                        <Download size={15} /> <span className="hidden sm:inline">Download</span>
                     </Button>
                 </div>
             </CardHeader>

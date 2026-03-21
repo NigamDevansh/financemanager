@@ -21,7 +21,7 @@ const Dashboard = ({ children, activeMenu }: DashboardProps) => {
                         <Sidebar activeMenu={activeMenu} />
                     </div>
 
-                    <div className="grow mx-5 mt-6 mb-16">{children}</div>
+                    <div className="grow mx-2 sm:mx-5 mt-6 mb-16">{children}</div>
                 </div>
             )}
         </div>

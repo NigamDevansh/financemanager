@@ -18,7 +18,7 @@ const ExpenseOverview = ({ transactions, onExpenseIncome }: ExpenseOverviewProps
 
     return (
         <Card>
-            <CardHeader className="flex flex-row items-start justify-between pb-8">
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-6 sm:pb-8">
                 <div className="space-y-1">
                     <CardTitle className="text-lg font-medium">Expense Overview</CardTitle>
                     <CardDescription className="text-xs">

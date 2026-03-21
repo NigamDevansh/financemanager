@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { assets } from "../assets/assets";
 import Input from "../components/Input";
 import { validateEmail } from "../util/validation";
 import axiosConfig from "../util/axiosConfig";
@@ -76,13 +75,28 @@ const Signup = () => {
     }
 
     return (
-        <div className="min-h-screen w-full flex flex-col bg-background">
+        <div className="min-h-screen w-full flex flex-col bg-background relative overflow-hidden">
+            {/* Animated gradient orbs */}
+            <div
+                className="absolute top-[-15%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-violet-400/30 to-fuchsia-400/20 blur-[100px] pointer-events-none"
+                style={{ animation: "float 8s ease-in-out infinite" }}
+            />
+            <div
+                className="absolute bottom-[-20%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-br from-pink-400/25 to-rose-400/15 blur-[120px] pointer-events-none"
+                style={{ animation: "float-reverse 10s ease-in-out infinite" }}
+            />
+            <div
+                className="absolute top-[30%] right-[20%] w-[35vw] h-[35vw] rounded-full bg-gradient-to-br from-blue-300/20 to-cyan-300/10 blur-[100px] pointer-events-none"
+                style={{ animation: "float 12s ease-in-out infinite 2s" }}
+            />
+            <div
+                className="absolute bottom-[10%] left-[15%] w-[25vw] h-[25vw] rounded-full bg-gradient-to-br from-amber-300/15 to-orange-300/10 blur-[80px] pointer-events-none"
+                style={{ animation: "float-reverse 9s ease-in-out infinite 1s" }}
+            />
+
             <Header />
             <div className="flex-grow w-full relative flex items-center justify-center p-4">
-                {/* Background image with blur*/}
-                <img src={assets.login_bg} alt="Background" className="absolute inset-0 w-full h-full object-cover filter blur-[4px] opacity-40 mix-blend-multiply" />
-
-                <Card className="relative z-10 w-full max-w-lg shadow-2xl border-border bg-card/95 backdrop-blur-[2px] overflow-hidden my-4">
+                <Card className="relative z-10 w-full max-w-lg shadow-2xl border-white/40 dark:border-white/10 bg-white/50 dark:bg-black/30 backdrop-blur-xl overflow-hidden my-4">
                     <CardHeader className="space-y-1">
                         <CardTitle className="text-2xl font-semibold text-center">
                             Create An Account

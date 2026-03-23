@@ -10,6 +10,7 @@ import { Plus } from "lucide-react";
 import AddIncomeForm from "../components/AddIncomeForm";
 import DeleteAlert from "../components/DeleteAlert";
 import IncomeOverview from "../components/IncomeOverview";
+import { Skeleton } from "../components/ui/skeleton";
 import type { Transaction, Category, IncomeFormData, DeleteAlertState } from "../types";
 
 const Income = () => {
@@ -160,17 +161,58 @@ const Income = () => {
         <Dashboard activeMenu="Income">
             <div className="my-5 mx-auto">
                 <div className="grid grid-cols-1 gap-6">
-                    <div>
-                        {/* overview for income with line char */}
-                        <IncomeOverview transactions={incomeData} onAddIncome={() => setOpenAddIncomeModal(true)} />
-                    </div>
+                    {loading ? (
+                        <>
+                            {/* Chart Skeleton */}
+                            <div className="bg-card p-4 sm:p-6 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm flex flex-col h-[350px]">
+                                <div className="space-y-2 mb-8 w-full">
+                                    <Skeleton className="h-5 w-1/3 rounded-md min-w-[120px]" />
+                                    <Skeleton className="h-3 w-1/2 rounded-md min-w-[180px]" />
+                                </div>
+                                <div className="flex-1 flex items-end justify-between gap-1 sm:gap-3 px-1 sm:px-2">
+                                    {Array(8).fill(0).map((_, i) => (
+                                        <Skeleton key={i} className="w-full rounded-t-md" style={{ height: `${Math.random() * 60 + 20}%` }} />
+                                    ))}
+                                </div>
+                            </div>
 
-                    <IncomeList
-                        transactions={incomeData}
-                        onDelete={(id) => setOpenDeleteAlert({ show: true, data: id })}
-                        onDownload={handleDownloadIncomeDetails}
-                        onEmail={handleEmailIncomeDetails}
-                    />
+                            {/* List Skeleton */}
+                            <div className="bg-card p-4 sm:p-6 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm mt-4">
+                                <div className="flex justify-between items-center mb-6">
+                                    <Skeleton className="h-5 w-1/3 rounded-md min-w-[100px]" />
+                                    <Skeleton className="h-4 w-16 rounded-md shrink-0" />
+                                </div>
+                                <div className="space-y-5 w-full">
+                                    {Array(5).fill(0).map((_, i) => (
+                                        <div key={i} className="flex items-center justify-between gap-4">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <Skeleton className="h-10 w-10 rounded-full shrink-0" />
+                                                <div className="space-y-2 w-full">
+                                                    <Skeleton className="h-4 w-1/2 rounded-md min-w-[80px]" />
+                                                    <Skeleton className="h-3 w-1/3 rounded-md min-w-[50px]" />
+                                                </div>
+                                            </div>
+                                            <Skeleton className="h-4 w-16 rounded-md shrink-0" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                {/* overview for income with line char */}
+                                <IncomeOverview transactions={incomeData} onAddIncome={() => setOpenAddIncomeModal(true)} />
+                            </div>
+
+                            <IncomeList
+                                transactions={incomeData}
+                                onDelete={(id) => setOpenDeleteAlert({ show: true, data: id })}
+                                onDownload={handleDownloadIncomeDetails}
+                                onEmail={handleEmailIncomeDetails}
+                            />
+                        </>
+                    )}
 
                     {/* Add Income Modal */}
                     <Modal

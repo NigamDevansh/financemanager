@@ -84,14 +84,12 @@ const AddIncomeForm = ({ onAddIncome, categories }: AddIncomeFormProps) => {
                     disabled={loading}
                     className="flex items-center gap-2">
                     {loading ? (
-                        <>
-                            <LoaderCircle className="w-4 h-4 animate-spin" />
+                        <div className="flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin"></span>
                             Adding...
-                        </>
+                        </div>
                     ) : (
-                        <>
-                            Add Income
-                        </>
+                        "Add Income"
                     )}
                 </Button>
             </div>

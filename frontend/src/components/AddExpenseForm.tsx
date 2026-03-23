@@ -12,6 +12,7 @@ const AddExpenseForm = ({ onAddExpense, categories }: AddExpenseFormProps) => {
         date: "",
         icon: "",
     });
+    const [loading, setLoading] = useState(false);
 
     // Effect to set a default category if categories are loaded and none is selected
     useEffect(() => {
@@ -27,6 +28,15 @@ const AddExpenseForm = ({ onAddExpense, categories }: AddExpenseFormProps) => {
         value: cat.id,
         label: `${cat.name}`,
     }));
+
+    const handleAddExpenseClick = async () => {
+        setLoading(true);
+        try {
+            await onAddExpense(expense);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="p-4">
@@ -72,9 +82,17 @@ const AddExpenseForm = ({ onAddExpense, categories }: AddExpenseFormProps) => {
                 <Button
                     type="button"
                     className="flex items-center gap-2"
-                    onClick={() => onAddExpense(expense)}
+                    onClick={handleAddExpenseClick}
+                    disabled={loading}
                 >
-                    Add Expense
+                    {loading ? (
+                        <div className="flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin"></span>
+                            Adding...
+                        </div>
+                    ) : (
+                        "Add Expense"
+                    )}
                 </Button>
             </div>
         </div>

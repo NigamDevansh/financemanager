@@ -147,10 +147,10 @@ const Signup = () => {
 
                             <Button disabled={isLoading} className="w-full py-5 text-base font-medium mt-2" type="submit">
                                 {isLoading ? (
-                                    <>
-                                        <LoaderCircle className="animate-spin w-5 h-5 mr-2" />
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-5 h-5 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin"></span>
                                         Signing Up...
-                                    </>
+                                    </div>
                                 ) : (
                                     "SIGN UP"
                                 )}

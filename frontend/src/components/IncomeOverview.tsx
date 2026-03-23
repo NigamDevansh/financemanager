@@ -10,12 +10,11 @@ const IncomeOverview = ({ transactions, onAddIncome }: IncomeOverviewProps) => {
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
     useEffect(() => {
         const result = prepareIncomeLineChartData(transactions);
-        console.log(result);
         setChartData(result);
 
         return () => { };
     }, [transactions]);
-    
+
     return (
         <Card>
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-6 sm:pb-8">

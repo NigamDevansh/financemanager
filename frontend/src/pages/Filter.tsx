@@ -32,7 +32,6 @@ const Filter = () => {
                 sortField,
                 sortOrder
             });
-            console.log('transactions: ', response.data);
             setTransactions(response.data);
         } catch (error: any) {
             console.error('Failed to fetch transactions: ', error);

@@ -37,7 +37,11 @@ const AddCategoryForm = ({ onAddCategory, initialCategoryData, isEditing }: AddC
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            await onAddCategory(category);
+            if (isEditing && initialCategoryData) {
+                await onAddCategory({ ...category, id: initialCategoryData.id });
+            } else {
+                await onAddCategory(category);
+            }
         } finally {
             setLoading(false);
         }

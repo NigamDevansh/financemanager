@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from "./apiEndpoints";
 
-const CLOUDINARY_UPLOAD_PRESET: string = "moneymanager";
+const CLOUDINARY_UPLOAD_PRESET: string = "personalFinanceApp";
 
 const uploadProfileImage = async (image: File): Promise<string> => {
     const formData = new FormData();

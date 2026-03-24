@@ -12,6 +12,7 @@ import DeleteAlert from "../components/DeleteAlert";
 import IncomeOverview from "../components/IncomeOverview";
 import { Skeleton } from "../components/ui/skeleton";
 import type { Transaction, Category, IncomeFormData, DeleteAlertState } from "../types";
+import ExportModal from "../components/ExportModal";
 
 const Income = () => {
     useUser();
@@ -24,6 +25,13 @@ const Income = () => {
         show: false,
         data: null,
     });
+
+    type ExportActionType = 'download' | 'email' | null;
+    const [exportModalState, setExportModalState] = useState<{ show: boolean, action: ExportActionType }>({
+        show: false,
+        action: null
+    });
+    const [exportLoading, setExportLoading] = useState(false);
 
     // Fetch income details from the API
     const fetchIncomeDetails = async () => {
@@ -121,10 +129,11 @@ const Income = () => {
         }
     }
 
-    const handleDownloadIncomeDetails = async () => {
+    const handleDownloadIncomeDetails = async (year: number, month: number) => {
+        setExportLoading(true);
         try {
-            const response = await axiosConfig.get(API_ENDPOINTS.INCOME_EXCEL_DOWNLOAD, { responseType: "blob" });
-            const filename = "income_details.xlsx";
+            const response = await axiosConfig.get(API_ENDPOINTS.INCOME_EXCEL_DOWNLOAD(year, month), { responseType: "blob" });
+            const filename = `income_details_${year}_${month}.xlsx`;
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
@@ -134,21 +143,28 @@ const Income = () => {
             link.parentNode?.removeChild(link);
             window.URL.revokeObjectURL(url);
             toast.success("Download income details successfully");
+            setExportModalState({ show: false, action: null });
         } catch (error) {
             console.error('Error downloading income details:', error);
             toast.error("Failed to download income");
+        } finally {
+            setExportLoading(false);
         }
     }
 
-    const handleEmailIncomeDetails = async () => {
+    const handleEmailIncomeDetails = async (year: number, month: number) => {
+        setExportLoading(true);
         try {
-            const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_INCOME);
+            const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_INCOME(year, month));
             if (response.status === 200) {
                 toast.success("Income details emailed successfully");
+                setExportModalState({ show: false, action: null });
             }
         } catch (error) {
             console.error('Error emailing income details:', error);
             toast.error("Failed to email income");
+        } finally {
+            setExportLoading(false);
         }
     }
 
@@ -208,8 +224,8 @@ const Income = () => {
                             <IncomeList
                                 transactions={incomeData}
                                 onDelete={(id) => setOpenDeleteAlert({ show: true, data: id })}
-                                onDownload={handleDownloadIncomeDetails}
-                                onEmail={handleEmailIncomeDetails}
+                                onDownload={() => setExportModalState({ show: true, action: 'download' })}
+                                onEmail={() => setExportModalState({ show: true, action: 'email' })}
                             />
                         </>
                     )}
@@ -235,6 +251,24 @@ const Income = () => {
                         <DeleteAlert
                             content="Are you sure want to delete this income details?"
                             onDelete={() => deleteIncome(openDeleteAlert.data!)}
+                        />
+                    </Modal>
+
+                    {/* Export Modal */}
+                    <Modal
+                        isOpen={exportModalState.show}
+                        onClose={() => setExportModalState({ show: false, action: null })}
+                        title={exportModalState.action === 'download' ? 'Download Income Details' : 'Email Income Details'}
+                    >
+                        <ExportModal
+                            loading={exportLoading}
+                            onExport={(year, month) => {
+                                if (exportModalState.action === 'download') {
+                                    handleDownloadIncomeDetails(year, month);
+                                } else if (exportModalState.action === 'email') {
+                                    handleEmailIncomeDetails(year, month);
+                                }
+                            }}
                         />
                     </Modal>
                 </div>

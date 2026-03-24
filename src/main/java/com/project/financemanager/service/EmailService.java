@@ -46,4 +46,29 @@ public class EmailService {
         }
     }
 
+    public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachmentBytes,
+            String filename) {
+        try {
+            Map<String, Object> emailPayload = Map.of(
+                    "sender", Map.of("name", senderName, "email", senderEmail),
+                    "to", List.of(Map.of("email", to)),
+                    "subject", subject,
+                    "textContent", body,
+                    "attachment", List.of(Map.of(
+                            "name", filename,
+                            "content", java.util.Base64.getEncoder().encodeToString(attachmentBytes)
+                    ))
+            );
+
+            restClient.post()
+                    .uri("/smtp/email")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(emailPayload)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send email with attachment via Brevo API", e);
+        }
+    }
+
 }

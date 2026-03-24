@@ -68,6 +68,15 @@ public class ExpenseService {
         return expenses.stream().map(this::toDTO).toList();
     }
 
+    public List<ExpenseDTO> getExpensesForUserByMonth(int year, int month) {
+        ProfileEntity profile = profileService.getCurrentProfile();
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+        List<ExpenseEntity> expenses = expenseRepository.findByProfileIdAndDateBetween(profile.getId(), startOfMonth,
+                endOfMonth);
+        return expenses.stream().map(this::toDTO).toList();
+    }
+
     // Delete expense by id
     public void deleteExpense(Long expenseId) {
         ProfileEntity profile = profileService.getCurrentProfile();

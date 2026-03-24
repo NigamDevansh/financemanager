@@ -11,6 +11,7 @@ import AddExpenseForm from "../components/AddExpenseForm";
 import DeleteAlert from "../components/DeleteAlert";
 import { Skeleton } from "../components/ui/skeleton";
 import type { Transaction, Category, ExpenseFormData, DeleteAlertState } from "../types";
+import ExportModal from "../components/ExportModal";
 
 const Expense = () => {
     useUser();
@@ -22,6 +23,13 @@ const Expense = () => {
         show: false,
         data: null,
     });
+
+    type ExportActionType = 'download' | 'email' | null;
+    const [exportModalState, setExportModalState] = useState<{ show: boolean, action: ExportActionType }>({
+        show: false,
+        action: null
+    });
+    const [exportLoading, setExportLoading] = useState(false);
 
     // Get All Expense Details
     const fetchExpenseDetails = async () => {
@@ -130,16 +138,17 @@ const Expense = () => {
         }
     };
 
-    const handleDownloadExpenseDetails = async () => {
+    const handleDownloadExpenseDetails = async (year: number, month: number) => {
+        setExportLoading(true);
         try {
             const response = await axiosConfig.get(
-                API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD,
+                API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD(year, month),
                 {
                     responseType: "blob",
                 }
             );
 
-            const filename = "expense_details.xlsx";
+            const filename = `expense_details_${year}_${month}.xlsx`;
 
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
@@ -151,21 +160,28 @@ const Expense = () => {
             window.URL.revokeObjectURL(url);
 
             toast.success("Expense details downloaded successfully!");
+            setExportModalState({ show: false, action: null });
         } catch (error) {
             console.error("Error downloading expense details:", error);
             toast.error("Failed to download expense details. Please try again.");
+        } finally {
+            setExportLoading(false);
         }
     };
 
-    const handleEmailExpenseDetails = async () => {
+    const handleEmailExpenseDetails = async (year: number, month: number) => {
+        setExportLoading(true);
         try {
-            const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_EXPENSE);
+            const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_EXPENSE(year, month));
             if (response.status === 200) {
                 toast.success("Email sent");
+                setExportModalState({ show: false, action: null });
             }
         } catch (e) {
             console.error("Error emailing expense details:", e);
             toast.error("Failed to email expense details. Please try again.");
+        } finally {
+            setExportLoading(false);
         }
     }
 
@@ -229,8 +245,8 @@ const Expense = () => {
                                 onDelete={(id) => {
                                     setOpenDeleteAlert({ show: true, data: id });
                                 }}
-                                onDownload={handleDownloadExpenseDetails}
-                                onEmail={handleEmailExpenseDetails}
+                                onDownload={() => setExportModalState({ show: true, action: 'download' })}
+                                onEmail={() => setExportModalState({ show: true, action: 'email' })}
                             />
                         </>
                     )}
@@ -254,6 +270,23 @@ const Expense = () => {
                         <DeleteAlert
                             content="Are you sure you want to delete this expense detail?"
                             onDelete={() => deleteExpense(openDeleteAlert.data!)}
+                        />
+                    </Modal>
+
+                    <Modal
+                        isOpen={exportModalState.show}
+                        onClose={() => setExportModalState({ show: false, action: null })}
+                        title={exportModalState.action === 'download' ? 'Download Expense Details' : 'Email Expense Details'}
+                    >
+                        <ExportModal
+                            loading={exportLoading}
+                            onExport={(year, month) => {
+                                if (exportModalState.action === 'download') {
+                                    handleDownloadExpenseDetails(year, month);
+                                } else if (exportModalState.action === 'email') {
+                                    handleEmailExpenseDetails(year, month);
+                                }
+                            }}
                         />
                     </Modal>
                 </div>

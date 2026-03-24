@@ -138,16 +138,22 @@ const Expense = () => {
         }
     };
 
-    const handleDownloadExpenseDetails = async (year: number, month: number) => {
-        setExportLoading(true);
-        try {
-            const response = await axiosConfig.get(
-                API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD(year, month),
-                {
-                    responseType: "blob",
-                }
-            );
-
+    const handleDownloadExpenseDetails = (year: number, month: number) => {
+        setExportModalState({ show: false, action: null });
+        toast("Download will start in a few seconds.", {
+            icon: '⏳',
+            style: {
+                background: '#eab308',
+                color: '#fff',
+            },
+        });
+        
+        axiosConfig.get(
+            API_ENDPOINTS.EXPENSE_EXCEL_DOWNLOAD(year, month),
+            {
+                responseType: "blob",
+            }
+        ).then(response => {
             const filename = `expense_details_${year}_${month}.xlsx`;
 
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -160,29 +166,32 @@ const Expense = () => {
             window.URL.revokeObjectURL(url);
 
             toast.success("Expense details downloaded successfully!");
-            setExportModalState({ show: false, action: null });
-        } catch (error) {
+        }).catch(error => {
             console.error("Error downloading expense details:", error);
             toast.error("Failed to download expense details. Please try again.");
-        } finally {
-            setExportLoading(false);
-        }
+        });
     };
 
-    const handleEmailExpenseDetails = async (year: number, month: number) => {
-        setExportLoading(true);
-        try {
-            const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_EXPENSE(year, month));
-            if (response.status === 200) {
-                toast.success("Email sent");
-                setExportModalState({ show: false, action: null });
-            }
-        } catch (e) {
-            console.error("Error emailing expense details:", e);
-            toast.error("Failed to email expense details. Please try again.");
-        } finally {
-            setExportLoading(false);
-        }
+    const handleEmailExpenseDetails = (year: number, month: number) => {
+        setExportModalState({ show: false, action: null });
+        toast("We will send you the email in a few seconds.", {
+            icon: '⏳',
+            style: {
+                background: '#eab308',
+                color: '#fff',
+            },
+        });
+        
+        axiosConfig.get(API_ENDPOINTS.EMAIL_EXPENSE(year, month))
+            .then(response => {
+                if (response.status === 200) {
+                    toast.success("Email sent successfully!");
+                }
+            })
+            .catch(e => {
+                console.error("Error emailing expense details:", e);
+                toast.error("Failed to email expense details. Please try again.");
+            });
     }
 
     useEffect(() => {

@@ -129,43 +129,55 @@ const Income = () => {
         }
     }
 
-    const handleDownloadIncomeDetails = async (year: number, month: number) => {
-        setExportLoading(true);
-        try {
-            const response = await axiosConfig.get(API_ENDPOINTS.INCOME_EXCEL_DOWNLOAD(year, month), { responseType: "blob" });
-            const filename = `income_details_${year}_${month}.xlsx`;
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode?.removeChild(link);
-            window.URL.revokeObjectURL(url);
-            toast.success("Download income details successfully");
-            setExportModalState({ show: false, action: null });
-        } catch (error) {
-            console.error('Error downloading income details:', error);
-            toast.error("Failed to download income");
-        } finally {
-            setExportLoading(false);
-        }
+    const handleDownloadIncomeDetails = (year: number, month: number) => {
+        setExportModalState({ show: false, action: null });
+        toast("Download will start in a few seconds.", {
+            icon: '⏳',
+            style: {
+                background: '#eab308',
+                color: '#fff',
+            },
+        });
+
+        axiosConfig.get(API_ENDPOINTS.INCOME_EXCEL_DOWNLOAD(year, month), { responseType: "blob" })
+            .then(response => {
+                const filename = `income_details_${year}_${month}.xlsx`;
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", filename);
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode?.removeChild(link);
+                window.URL.revokeObjectURL(url);
+                toast.success("Download income details successfully");
+            })
+            .catch(error => {
+                console.error('Error downloading income details:', error);
+                toast.error("Failed to download income");
+            });
     }
 
-    const handleEmailIncomeDetails = async (year: number, month: number) => {
-        setExportLoading(true);
-        try {
-            const response = await axiosConfig.get(API_ENDPOINTS.EMAIL_INCOME(year, month));
-            if (response.status === 200) {
-                toast.success("Income details emailed successfully");
-                setExportModalState({ show: false, action: null });
-            }
-        } catch (error) {
-            console.error('Error emailing income details:', error);
-            toast.error("Failed to email income");
-        } finally {
-            setExportLoading(false);
-        }
+    const handleEmailIncomeDetails = (year: number, month: number) => {
+        setExportModalState({ show: false, action: null });
+        toast("We will send you the email in a few seconds.", {
+            icon: '⏳',
+            style: {
+                background: '#eab308',
+                color: '#fff',
+            },
+        });
+
+        axiosConfig.get(API_ENDPOINTS.EMAIL_INCOME(year, month))
+            .then(response => {
+                if (response.status === 200) {
+                    toast.success("Income details emailed successfully");
+                }
+            })
+            .catch(error => {
+                console.error('Error emailing income details:', error);
+                toast.error("Failed to email income");
+            });
     }
 
     useEffect(() => {

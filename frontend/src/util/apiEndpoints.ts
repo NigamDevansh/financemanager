@@ -1,5 +1,5 @@
-export const BASE_URL: string = "http://localhost:8080/api/v1";
-const CLOUDINARY_CLOUD_NAME: string = "dhadf5h7j";
+export const BASE_URL: string = "https://financemanager-0296.onrender.com/api/v1";
+const CLOUDINARY_CLOUD_NAME: string = "dz5izi0p8";
 
 export const API_ENDPOINTS = {
     LOGIN: "/login",
@@ -12,13 +12,13 @@ export const API_ENDPOINTS = {
     CATEGORY_BY_TYPE: (type: string) => `/categories/${type}`,
     ADD_INCOME: "/incomes",
     DELETE_INCOME: (incomeId: string | number) => `/incomes/${incomeId}`,
-    INCOME_EXCEL_DOWNLOAD: "/excel/download/income",
-    EMAIL_INCOME: "/email/income-excel",
+    INCOME_EXCEL_DOWNLOAD: (year: number, month: number) => `/excel/download/income?year=${year}&month=${month}`,
+    EMAIL_INCOME: (year: number, month: number) => `/email/income-excel?year=${year}&month=${month}`,
     GET_ALL_EXPENSE: "/expenses",
     ADD_EXPENSE: "/expenses",
     DELETE_EXPENSE: (expenseId: string | number) => `/expenses/${expenseId}`,
-    EXPENSE_EXCEL_DOWNLOAD: "/excel/download/expense",
-    EMAIL_EXPENSE: "/email/expense-excel",
+    EXPENSE_EXCEL_DOWNLOAD: (year: number, month: number) => `/excel/download/expense?year=${year}&month=${month}`,
+    EMAIL_EXPENSE: (year: number, month: number) => `/email/expense-excel?year=${year}&month=${month}`,
     APPLY_FILTERS: "/filter",
     DASHBOARD_DATA: "/dashboard",
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`

@@ -21,10 +21,13 @@ public class AppUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         ProfileEntity profileEntity = profileRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        // OAuth users don't have passwords — use empty string as placeholder
+        String password = profileEntity.getPassword() != null ? profileEntity.getPassword() : "";
         // this will return the user from the database
         return User.builder()
                 .username(profileEntity.getEmail())
-                .password(profileEntity.getPassword())
+                .password(password)
                 .build();
     }
 

@@ -2,6 +2,7 @@ package com.project.financemanager.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,25 +22,40 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.project.financemanager.security.JwtRequestFilter;
 import com.project.financemanager.service.AppUserDetailsService;
+import com.project.financemanager.security.OAuth2LoginSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
+
+    @Value("${financemanager.frontend.url}")
+    private String frontendUrl;
 
     private final AppUserDetailsService appUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/activate", "/health", "/status", "/login").permitAll()
+                        .requestMatchers("/register", "/activate", "/health", "/status",
+                                "/login", "/oauth2/**", "/login/oauth2/**", "/oauth2/exchange")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oAuth2 -> oAuth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler((request, response, exception) -> {
+                            log.error("OAuth2 login failed: {}", exception.getMessage());
+                            response.sendRedirect(frontendUrl + "/login?error=oauth_failed");
+                        }));
         return httpSecurity.build();
     }
 

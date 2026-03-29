@@ -21,5 +21,7 @@ export const API_ENDPOINTS = {
     EMAIL_EXPENSE: (year: number, month: number) => `/email/expense-excel?year=${year}&month=${month}`,
     APPLY_FILTERS: "/filter",
     DASHBOARD_DATA: "/dashboard",
+    GOOGLE_AUTH: `${BASE_URL}/oauth2/authorization/google`,
+    OAUTH2_EXCHANGE: "/oauth2/exchange",
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`
 };

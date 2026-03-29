@@ -132,6 +132,18 @@ public class ProfileService {
     }
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
+
+        var existingProfile = profileRepository.findByEmail(authDTO.getEmail());
+        if (existingProfile.isPresent()) {
+            ProfileEntity profile = existingProfile.get();
+            if (profile.getAuthProviderType() != null
+                    && profile.getAuthProviderType() != AuthProviderType.LOCAL) {
+                throw new RuntimeException(
+                        "This account was created using " + profile.getAuthProviderType()
+                                + ". Please use that method to log in.");
+            }
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));

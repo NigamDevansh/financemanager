@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import LearnMore from "./pages/LearnMore";
+import OAuth2Callback from "./pages/OAuth2Callback";
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                     <Route path="/filter" element={<Filter />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/oauth2/callback" element={<OAuth2Callback />} />
                 </Routes>
             </BrowserRouter>
         </>

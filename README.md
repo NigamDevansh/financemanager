@@ -1,5 +1,8 @@
 # Finance Manager
 
+https://github.com/user-attachments/assets/3a30e3d4-4dfb-4697-8fbe-0509467a228c
+
+
 Full-stack personal finance tracker with secure Google OAuth2 authentication, automated email notifications, and Excel report generation.
 
 **Tech Stack:** Spring Boot 4 · React 18 (Vite + TypeScript) · PostgreSQL · Spring Security · OAuth2 · JWT · Tailwind CSS · Shadcn/UI · Recharts · Apache POI · Brevo API · Cloudinary
